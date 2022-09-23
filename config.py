@@ -1,0 +1,3 @@
+discordToken = "MTAyMjQ1MDU0Mjc0NTc1MTYwMg.GBLPtm.UYt9td2i1An99mgpH90M3NpCp5MFzeO3I3rWYc"
+apiToken = "23268828707a32e6bc3382c39f4ef302"
+
