@@ -5,7 +5,15 @@ import requests
 
 intents = discord.Intents.all()
 
-bot = commands.Bot(command_prefix='!', intents=intents)
+bot = commands.Bot(command_prefix='/', intents=intents)
+
+
+def pluralize(value, word):
+    if value <= 1:
+        return f"{word}"
+    else:
+        return f"{word}s"
+
 
 
 # On ready
@@ -38,21 +46,22 @@ async def search(ctx, *args):
         oniStreamResponse = requests.get("https://oni-stream.com/api/listanimes/" + str(id))
         
         if oniStreamResponse.status_code == 404:
-            await commande_channel.send(error_message)
+            await commande_channel.send("L'anime n'existe (encore) pas sur oni-stream")
         else:
             image_url = oniStreamResponse.json()["anime"]["anime_poster"]
+
+            episodeNbr = oniStreamResponse.json()["episodes"]
+            saisonNbr = oniStreamResponse.json()["saisons"]
 
             embed = discord.Embed(title=oniStreamResponse.json()["anime"]["anime_name"], 
             #description de l'anime,
                 url=oniStreamResponse.json()["url"],
                 color=0xff0000)
             embed.set_thumbnail(url=image_url)
-            embed.add_field(name="Nombre de saison(s)", value= str(oniStreamResponse.json()["anime"]["seasons_number"]) + " saison(s)"    , inline=True)
-            embed.add_field(name="Nombre d'épisode(s)", value= str(oniStreamResponse.json()["episodes"]) + " épisode(s)", inline=True)
+            embed.add_field(name="Nombre de saisons", value= str(saisonNbr) + " " + pluralize(saisonNbr, "saison") + " " + pluralize(saisonNbr, "disponible")    , inline=True)
+            embed.add_field(name="Nombre d'épisodes", value= str(episodeNbr) + " " + pluralize(episodeNbr, "episode") + " " + pluralize(episodeNbr, "disponible"), inline=True)
             embed.set_footer(text="oni-stream.com")
 
-
             await commande_channel.send(embed=embed)
-
     
 bot.run(DISCORD_TOKEN)
