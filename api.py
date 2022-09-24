@@ -1,7 +1,7 @@
 import requests
 
 from config import apiToken
-titre = "Black Summoner"
+titre = "Jojo Bizarre Adventure"
 print(titre)
 
 response = requests.get("https://api.themoviedb.org/3/search/tv?api_key=" + apiToken + "&language=fr-FR&page=1&query=" + titre + "&include_adult=true")
